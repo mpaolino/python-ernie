@@ -39,7 +39,6 @@ since the main process will finish and with it the RPC server thread.
 Non locking server example
 --------------------------
 
-from ernie import mod, start
 
     from ernie import mod, start
     
@@ -55,7 +54,6 @@ from ernie import mod, start
 Locking server example 
 ----------------------
 
-from ernie import mod, start
 
     from ernie import mod, start
     
