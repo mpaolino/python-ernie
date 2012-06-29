@@ -5,7 +5,7 @@ from distutils.core import setup
 # The original author of this library is
 # Ken Robertson ken@invalidlogic.com
 # This version is a fork on github maintained by
-# Andre Graf andre@dergraf.org.
+# Miguel Paolino miguel@paolino.com.uy.
 #
 # Ken's library version number depended on
 # the version number of python-bert. This is
@@ -14,15 +14,15 @@ from distutils.core import setup
 # the dependencies listed in 'install_requires'.
 # For this reason I manually set the version
 # number.
-__version__ = '1.0.0'
+__version__ = '2.0.0'
 
 setup(
     name = 'ernie',
     version = __version__,
     description = 'BERT-Ernie Library',
-    author = 'Ken Robertson',
-    author_email = 'ken@invalidlogic.com',
-    url = 'http://github.com/krobertson/python-ernie',
+    author = 'Miguel Paolino',
+    author_email = 'miguel@paolino.com.uy',
+    url = 'http://github.com/mpaolino/python-ernie',
     packages = ['ernie'],
     classifiers = [
         'Intended Audience :: Developers',

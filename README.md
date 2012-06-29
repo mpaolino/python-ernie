@@ -3,7 +3,7 @@ Python-Ernie
 
 By Ken Robertson (ken@invalidlogic.com)
 
-Python-Ernie is a port of the Ruby-based Ernie server by Tom Preston-Werner.  Python-Ernie is the Python server implementation for the BER-RPC specification.
+Python-Ernie is a (now threaded) port of the Ruby-based Ernie server by Tom Preston-Werner. Python-Ernie is the Python server implementation for the BER-RPC specification. Threaded version implemented by Miguel Paolino (miguel@paolino.com.uy).
 
 See the full BERT-RPC specification at [bert-rpc.org](http://bert-rpc.org).
 
@@ -13,7 +13,7 @@ Installation
 
 To install Python-Ernie, you can use pip or traditional setup.py:
 
-    $ pip install git+git://github.com/krobertson/python-ernie 
+    $ pip install git+git://github.com/mpaolino/python-ernie 
 
 pip will install all the dependencies for you which you have to do by yourself when using setup.py directly. This means you need to install the Python port of BERT serializers and Erlastic.
 
@@ -30,6 +30,30 @@ To install python-ernie itself, run:
 
 Example Handler
 ---------------
+This is a (new) threaded version, which will serve multiple conections on parallel, there is more than one way to use it.
+The non-locking and the locking way. The non-locking way will start the BERT-RPC server and return the program control
+to the subsecuent lines of code, it will be the responsability of the user to keep the program using the library running.
+Calling the start() method of the service/library on a non-locking manner and do nothing will fail to keep the server running
+since the main process will finish and with it the RPC server thread.
+
+Non locking server example
+--------------------------
+
+from ernie import mod, start
+
+    from ernie import mod, start
+    
+    def calc_add(a, b):
+        return a + b
+    mod('calc').fun('add', calc_add)
+    
+    if __name__ == "__main__":
+        start(daemon=True)
+        while True:
+            time.sleep(100)
+
+Locking server example 
+----------------------
 
 from ernie import mod, start
 
@@ -43,12 +67,13 @@ from ernie import mod, start
         start()
 
 
+
 Contribute
 ----------
 
 If you'd like to hack on Python-Ernie, start by forking my repo on GitHub:
 
-http://github.com/krobertson/python-ernie
+http://github.com/mpaolino/python-ernie
 
 Just create your own fork, hack on it, and then send me a pull request once done.
 
@@ -58,23 +83,24 @@ Todo
 
 I'll be the first to admin I am still new to Python.  So if I am way off on best practices in Python, let me know!
 
+1. Separate library functionality (transport agnostic) from implemented service.
 1. Update exception handling to return traceback
 1. Ensure correct handling around read operations
 1. See if I can clean up the way you define your modules
 1. Test
 
-
 Credits
 ---------
 
+* [@krobertson](https://github.com/krobertson) for original port of python-ernie
 * [@mojombo](https://github.com/mojombo) for BERT/Ernie
 * [@samuel](https://github.com/samuel) for python-bert
 * [@dergraf](https://github.com/dergraf) for pip compatibility
 
-
 License
 ---------
 
+Copyright (c) 2012 Miguel Paolino
 Copyright (c) 2009 Ken Robertson
 
 Permission is hereby granted, free of charge, to any person obtaining
