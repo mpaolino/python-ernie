@@ -3,7 +3,7 @@ Python-Ernie
 
 Original Ruby port by Ken Robertson (ken@invalidlogic.com)
 
-Python-Ernie is a (now threaded) port of the Ruby-based Ernie server by Tom Preston-Werner. Python-Ernie is the Python server implementation for the BER-RPC specification. Threaded version implemented by Miguel Paolino (miguel@paolino.com.uy).
+Python-Ernie is a (now threaded) port of the Ruby-based Ernie server by Tom Preston-Werner. Python-Ernie is the Python server implementation for the BERT-RPC specification. Threaded version implemented by Miguel Paolino (miguel@paolino.com.uy).
 
 See the full BERT-RPC specification at [bert-rpc.org](http://bert-rpc.org).
 
