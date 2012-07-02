@@ -137,4 +137,4 @@ class ThreadedErnie(object):
         # Kill all threads or wait for them to finnish on exit, False = wait
         server_thread.daemon_threads = kill_threads
         server_thread.start()
-        print "Server running..."
+        print "Ernie server running on %s:%s" % (host, port)

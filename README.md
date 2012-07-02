@@ -1,6 +1,5 @@
 Python-Ernie
 =====
-
 Original Ruby port by Ken Robertson (ken@invalidlogic.com)
 
 Python-Ernie is a (now threaded) port of the Ruby-based Ernie server by Tom Preston-Werner. Python-Ernie is the Python server implementation for the BERT-RPC specification. Threaded version implemented by Miguel Paolino (miguel@paolino.com.uy).
@@ -31,12 +30,12 @@ To install python-ernie itself, run:
 Example Handler
 ---------------
 This is a (new) threaded version, which will serve multiple conections on parallel. There is more than one way to use it,
-the non-locking and the locking way. The non-locking way will start the BERT-RPC server and return the program control
+the non-blocking and the blocking way. The non-blocking way will start the BERT-RPC server and return the program control
 to the subsequent lines of code, it will be the responsability of the user to keep the program using the library running.
-Calling the start() method of the service/library on a non-locking manner and do nothing will fail to keep the server running
+Calling the start() method of the service/library on a non-blocking manner and do nothing will fail to keep the server running
 since the main process will finish and with it the RPC server thread.
 
-Non locking server example
+Non blocking server example
 --------------------------
 
 
@@ -51,7 +50,7 @@ Non locking server example
         while True:
             time.sleep(100)
 
-Locking server example 
+Blocking server example 
 ----------------------
 
 
@@ -79,7 +78,7 @@ Just create your own fork, hack on it, and then send me a pull request once done
 Todo
 ---------
 
-1. Separate library functionality (transport agnostic) from implemented service.
+1. Better separate library functionality (transport agnostic) from implemented service.
 1. Update exception handling to return traceback
 1. Ensure correct handling around read operations
 1. See if I can clean up the way you define your modules
@@ -97,6 +96,7 @@ License
 ---------
 
 Copyright (c) 2012 Miguel Paolino
+
 Copyright (c) 2009 Ken Robertson
 
 Permission is hereby granted, free of charge, to any person obtaining
