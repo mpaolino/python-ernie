@@ -57,7 +57,7 @@ class Ernie(object):
     def write_berp(self, output, obj):
         data = bert.encode(obj)
         output.write(struct.pack("!L", len(data)))
-        output.write(data)
+
         output.flush()
 
     def handle_input(self, input, output):
@@ -121,20 +121,41 @@ class Mod:
 
 
 class ThreadedTCPServer(SocketServer.ThreadingMixIn, SocketServer.TCPServer):
-        pass
+        allow_reuse_address = True
 
 
-class ThreadedErnie(object):
-    def start(self, daemon=False, host='', port=50007, kill_threads=False):
+class ForkingTCPServer(SocketServer.ForkingMixIn, SocketServer.TCPServer):
+        allow_reuse_address = True
+
+
+class ErnieServer(object):
+
+    def __init__(self, daemon=False, host='', port=50007, forking=False,
+            async=False):
+        self.daemon = daemon
+        self.host = host
+        self.port = port
+        self.forking = forking
+        self.async = async
+        if forking and async:
+            self.server = ForkingTCPServer((host, port), ErnieTCPHandler)
+        elif not forking and async:
+            self.server = ThreadedTCPServer((host, port), ErnieTCPHandler)
+        if not async:
+            self.server = SocketServer.TCPServer((host, port), ErnieTCPHandler)
+
+    def start(self):
         Ernie.log("Starting")
-        server = ThreadedTCPServer((host, port), ErnieTCPHandler)
-
-        # Start a thread with the server -- that thread will then start one
-        # more thread for each request
-        server_thread = threading.Thread(target=server.serve_forever)
-        # Exit the server thread when the main thread terminates
-        server_thread.daemon = daemon
-        # Kill all threads or wait for them to finnish on exit, False = wait
-        server_thread.daemon_threads = kill_threads
-        server_thread.start()
-        print "Ernie server running on %s:%s" % (host, port)
+        if self.daemon:
+            # Start a thread with the server -- that thread will then start one
+            # more threads/processes for each request
+            server_thread = threading.Thread(target=self.server.serve_forever)
+            # Exit the server thread when the main thread terminates
+            #server_thread.daemon = self.daemon
+            # Kill all threads or wait for them to finnish on exit, False = wait
+            server_thread.daemon_threads = False
+            server_thread.start()
+            print "Ernie server running on %s:%s" % (self.host, self.port)
+        else:
+            print "Starting ernie server on %s:%s" % (self.host, self.port)
+            self.server.serve_forever()

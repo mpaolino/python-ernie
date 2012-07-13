@@ -1,8 +1,9 @@
 Python-Ernie
 =====
 Original Ruby port by Ken Robertson (ken@invalidlogic.com)
+Threaded/forking version implemented by Miguel Paolino (miguel@paolino.com.uy).
 
-Python-Ernie is a (now threaded) port of the Ruby-based Ernie server by Tom Preston-Werner. Python-Ernie is the Python server implementation for the BERT-RPC specification. Threaded version implemented by Miguel Paolino (miguel@paolino.com.uy).
+python-ernie is a (now a sync and async) port of the Ruby-based Ernie server by Tom Preston-Werner. Python-Ernie is the Python server implementation for the BERT-RPC specification. The default request serving method is sync and secuential, this version also gives the possibility to serve requests in a async (parallel) fashion using threads or forks.
 
 See the full BERT-RPC specification at [bert-rpc.org](http://bert-rpc.org).
 
@@ -10,7 +11,7 @@ See the full BERT-RPC specification at [bert-rpc.org](http://bert-rpc.org).
 Installation
 ------------
 
-To install Python-Ernie, you can use pip or traditional setup.py:
+To install python-ernie, you can use pip or traditional setup.py:
 
     $ pip install git+git://github.com/mpaolino/python-ernie 
 
@@ -29,14 +30,12 @@ To install python-ernie itself, run:
 
 Example Handler
 ---------------
-This is a (new) threaded version, which will serve multiple conections on parallel. There is more than one way to use it,
-the non-blocking and the blocking way. The non-blocking way will start the BERT-RPC server and return the program control
-to the subsequent lines of code, it will be the responsability of the user to keep the program using the library running.
+There is more than one way to use ernie, the non-blocking and the blocking way. The non-blocking way will start the BERT-RPC server and return the program control to subsequent lines of code, it will be the responsability of the user to keep the program using the library running. This comes in handy when you need to do other stuff besides serving BERT-RPC.
 Calling the start() method of the service/library on a non-blocking manner and do nothing will fail to keep the server running
-since the main process will finish and with it the RPC server thread.
+since the main process will finish and with it the child RPC server thread/process.
 
 Non blocking server example
---------------------------
+---------------------------
 
 
     from ernie import mod, start
@@ -63,12 +62,28 @@ Blocking server example
     if __name__ == "__main__":
         start()
 
+async
+-----
+To serve request asynchronously you can choose to use threads or forking processes. Forking has the advantage of using all the underlying available CPUs of the system. Threads will use all the CPUs but will compete por the GIL making the computation time similar -if not worst- to serial execution time for CPU-bound tasks. You are not exempt from doing your share of thinking, functions that execute in parallel on threads or processes will have to be designed to do so. Also, beware of libraries that are not thread-safe, those will not work with ernie threads.
+
+To use the async mode you pass several arguments to the start function.
+
+
+    start(daemon=False, host='', port=50007, async=False, forking=False)
+
+    Parameters:
+    
+    daemon  - Blocking/non-blocking ernie server. Defaults to False, blocking mode.
+    host    - Host (IP) to bind. Empty string means all IPs, defaults to all IPs.
+    port    - TCP port to bind to.
+    async   - Run in async mode. Defaults to False, meaning sync mode.
+    forking - Use forks for async. Defaults to False, meaning threads.
 
 
 Contribute
 ----------
 
-If you'd like to hack on Python-Ernie, start by forking my repo on GitHub:
+If you'd like to hack on python-ernie, start by forking my repo on GitHub:
 
 http://github.com/mpaolino/python-ernie
 
